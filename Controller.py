@@ -48,6 +48,10 @@ class Initialize:
         self.buffTimeFirst = time.time()
         self.buffTimeSecond = 0
         self.boolbuffer = False
+        self.hotkeybuffDict = {}
+        self.n = 0
+        self.strJoiner = ""
+        
         
         # -----------COMENZAR-----------
     def start(self):
@@ -131,10 +135,11 @@ class Initialize:
                 self.textHotkey.place(x=bbox[0],y=(bbox[1]+21),w=bbox[2],h=bbox[3])
                 self.textHotkey.focus()
                 #Identificar teclas
-                self.textHotkey.bind("<Key>",self.keyBuffer)
+                
                 self.textHotkey.bind("<FocusOut>", lambda e: e.widget.place_forget())
                 self.textHotkey.bind("<FocusIn>",lambda e: print(e))
-                self.textHotkey.bind("<Return>", lambda e: e.widget.place_forget())
+                self.textHotkey.bind("<Return>", self.keySave)
+                self.textHotkey.bind("<Key>",self.keyBuffer)
                 
             print(int(column[1:]))
         
@@ -148,6 +153,8 @@ class Initialize:
     def keyBuffer(self,e):
         # El hotkey se registrará con poco tiempo de intervalo dado que se haya presionado
         # El buffer durará 3 segundos, despues de los cuales se borrará el hotkey
+        # 3 keystrokes max
+        # 2 modifiers max
         if not self.boolbuffer:
             self.buffTimeFirst = e.time
             
@@ -156,25 +163,54 @@ class Initialize:
             
         deltaT = abs(self.buffTimeFirst-self.buffTimeSecond)
             
-        print("Keysym:",e.keysym)
-        print("State:",e.state)
-        print("Char:",e.char)
-        print("KeyCode:",e.keycode)
-        print("Serial:",e.serial)
-        print("Time:",e.time,"ms")
-        print("Type:",e.type)
+        
+        # print("Keysym:",e.keysym)
+        # print("State:",e.state)
+        # print("Char:",e.char)
+        # print("KeyCode:",e.keycode)
+        # print("Serial:",e.serial)
+        # print("Time:",e.time,"ms")
+        # print("Type:",e.type)
         print("DeltaTime:",deltaT,"ms")
         print(e)
+        
+        
+        if deltaT < 300: # Menor a 300ms
+            # En esta situación se guardará la secuencia de valores
+            self.hotkeybuffDict[f"keysym{self.n}"] = e.keysym
+            
+            
+            
+        else: # Mayor a 3 segundos
+            # Se reinicia la cuenta y el diccionario
+            self.n = 0
+            self.hotkeybuffDict = {}
+            self.hotkeybuffDict[f"keysym{self.n}"] = e.keysym
+            print(self.hotkeybuffDict)
+        
+                
+        tupleValues = tuple(self.hotkeybuffDict.values())
+        self.strJoiner = "+".join(tupleValues)
+        print(self.strJoiner)
+        self.textHotkey.config(text=self.strJoiner)
         print("-----------")
-        
-        if deltaT > 3000: #Mayor a 3 segundos
-            pass
-        else: # Menor a 3 segundos
-            pass
-        
         self.boolbuffer = not self.boolbuffer # Se ira cambiando
+        self.n += 1 # Ira aumentando el valor
+        if self.n > 2:
+            self.n = 0
+            self.hotkeybuffDict = {}
+            
+    # -----------SAVE THE KEY BUFFER IF ENTER IS PRESSED-----------
+    def keySave(self,e):
+        
+        item = self.treeCreador.focus()
+        self.treeCreador.item(item,value=self.strJoiner)
+        self.listBoton[item]["values"] = self.strJoiner
+        self.hotkeybuffDict = {}
 
-
+        e.widget.place_forget()
+        self.ventana.focus() # Quitar focus del textEntry
+            
     def loadData(self):
         try:
             with open(os.path.join(PATHJS),"r") as file:
