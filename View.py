@@ -14,6 +14,7 @@ LIST = "Lista"
 DELETE = "Eliminar"
 LISTACOLUMNAS = ["hotkey"]
 HEIGHTXWIDTH = [200, 300]
+LABELTL = "Ingresa HotKey para activar y desactivar"
 
 # ---------------VARIABLES---------------
 
@@ -27,6 +28,11 @@ ventana.columnconfigure(2, weight=1)
 ventana.rowconfigure(0, weight=1, minsize=100)
 ventana.rowconfigure(1, weight=10)
 
+
+# Ventana TopLevel
+
+ventanaTopLevel = tkinter.Toplevel(ventana)
+
 # Frames secundarios
 frame00 = tkinter.LabelFrame(ventana)
 frame01 = tkinter.LabelFrame(ventana)  # BOTONES Y TITULO
@@ -34,6 +40,10 @@ frame02 = tkinter.LabelFrame(ventana)
 frame10 = tkinter.LabelFrame(ventana)  # EN USO / LISTA
 frame11 = tkinter.LabelFrame(ventana)  # ENTRE 10 y 12
 frame12 = tkinter.LabelFrame(ventana)  # CREADOS
+
+# Frames secundarios TopLevel
+frameTL00 = tkinter.LabelFrame(ventanaTopLevel) # Frame de arriba
+frameTL01 = tkinter.LabelFrame(ventanaTopLevel) # Frame de abajo
 
 # FRAMES PARA LISTA EN USO Y CREADO
 frameLista = tkinter.LabelFrame(ventana, relief="groove")
@@ -45,6 +55,7 @@ frame12 = frameCreado  # DEFINIENDO QUE ES LO MISMO pero inutil
 labelName = tkinter.Label(frame01, text=NAMETITLE)
 labelUso = tkinter.Label(frameLista, text=USE)
 labelCreados = tkinter.Label(frameCreado, text=MADE)
+labelTopLevel = ttk.Label(frameTL00, text=LABELTL)
 
 # BOTONES
 botonAgregar = tkinter.Button(frame01, text=ADD)
@@ -64,6 +75,9 @@ entryNombre = ttk.Entry(frameCreado)
 
 # TEXT
 textHotkey = tkinter.Label(frameCreado)
+textTL = ttk.Label(frameTL01)
+
+
 # ---------------GRIDS[VENTANA]---------------
 
 # FRAMES
@@ -86,6 +100,12 @@ frame11.columnconfigure(0, weight=1)
 frameCreado.grid(row=1, column=2, sticky="NSEW")  # LISTA 12
 frameCreado.columnconfigure(0, weight=1)
 frameCreado.rowconfigure(1, weight=1)
+
+# ---------------GRIDS[VENTANATOPLEVEL]---------------
+
+#
+frameTL00.grid(row=0,column=0,sticky="NSEW")
+frameTL01.grid(row=1,column=0,sticky="NSEW")
 
 # ---------------GRIDS[FRAMES]---------------
 
@@ -112,12 +132,22 @@ labelCreados.grid(row=0, column=0)  # FRAME12
 treeviewLista.grid(row=1, column=0, sticky="NSEW")
 treeviewCreador.grid(row=1, column=0, sticky="NSEW")
 
-# # #---------------TREEVIEW CONFIG [FRAMES]---------------
+# ---------------GRIDS[VENTANATOPLEVEL]---------------
+
+labelTopLevel.grid(row=0,column=0,sticky="NSEW")
+textTL.grid(row=0,column=0,sticky="NSEW")
+
+#---------------TREEVIEW CONFIG [FRAMES]---------------
 # Titulos
 treeviewLista.heading("#0", text=HEADINGNAMES[0])
 treeviewLista.heading(0, text=HEADINGNAMES[1])
 treeviewCreador.heading("#0", text=HEADINGNAMES[0])
 treeviewCreador.heading(0, text=HEADINGNAMES[1])
+
+# ---------------GRIDS[TOPLEVEL]---------------
+ventanaTopLevel.minsize(200,100)
+ventanaTopLevel.withdraw() # Hace que no aparezca directamente, sino hasta que iconify sea declarado
+
 # Boton ADD para insertar un item en treeview
 
 

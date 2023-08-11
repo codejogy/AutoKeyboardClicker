@@ -3,7 +3,7 @@
 # Va a actualizar Model
 import time
 
-from Model import *
+# from Model import *
 
 
 import View
@@ -27,6 +27,7 @@ class Initialize:
         self.botonEliminar = View.botonEliminar
         self.treeLista = View.treeviewLista
         self.textHotkey = View.textHotkey
+        self.newWindow = View.ventanaTopLevel
 
         # Configuración
         self.boton.configure(command=self.agregar)
@@ -35,7 +36,8 @@ class Initialize:
 
         # Crear binds
         # self.treeCreador.bind("<Double-1>",lambda e:self.checkEvents(e))
-        self.treeCreador.bind("<1>",lambda e:self.checkEventsTree(e))
+        self.treeCreador.bind("<1>",self.checkEventsTree)
+        self.treeCreador.bind("<Return>",self.openWindow)
 
         # Variables
         self.num = self.valID() # Para los valores por defecto
@@ -68,7 +70,7 @@ class Initialize:
         # -----------CALLBACK PARA BOTÓN agregar -----------
     def agregar(self):
 
-        id = self.treeCreador.insert("","end",text=f"default{self.num}",values=[f"prueba{self.num}"])
+        id = self.treeCreador.insert("","end",text=f"default{self.num}",values=[""])
 
         self.listBoton[id] = self.treeCreador.item(id)
         # print(self.listBoton)
@@ -210,7 +212,19 @@ class Initialize:
 
         e.widget.place_forget()
         self.ventana.focus() # Quitar focus del textEntry
-            
+
+    # -----------OPENS WINDOW WHEN AN ENTER IS PRESSED WHEN AN ITEM IS FOCUSED -----------
+    def openWindow(self,e):
+        item = self.treeCreador.focus()
+        self.newWindow.geometry("500x100")
+        self.newWindow.resizable(False,False) # Para hacerlo no resizable
+        self.newWindow.deiconify()
+        self.newWindow.wm_protocol("WM_DELETE_WINDOW",lambda: self.newWindow.withdraw()) # Esto ocurre al tratar de salir de la ventana
+        print(item)
+        # self.newWindow.pack()
+        pass
+    
+    
     def loadData(self):
         try:
             with open(os.path.join(PATHJS),"r") as file:
