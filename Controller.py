@@ -28,7 +28,8 @@ class Initialize:
         self.treeLista = View.treeviewLista
         self.textHotkey = View.textHotkey
         self.newWindow = View.ventanaTopLevel
-
+        self.textTL = View.textTL
+        
         # Configuración
         self.boton.configure(command=self.agregar)
         self.botonEliminar.configure(command=self.deleteItem)
@@ -136,12 +137,15 @@ class Initialize:
                 bbox = self.treeCreador.bbox(item,column)
                 self.textHotkey.place(x=bbox[0],y=(bbox[1]+21),w=bbox[2],h=bbox[3])
                 self.textHotkey.focus()
+                self.strJoiner = values["values"][0]
+                self.textHotkey.config(text=self.strJoiner)
                 #Identificar teclas
                 
                 self.textHotkey.bind("<FocusOut>", lambda e: e.widget.place_forget())
                 self.textHotkey.bind("<FocusIn>",lambda e: print(e))
-                self.textHotkey.bind("<Return>", self.keySave)
+                
                 self.textHotkey.bind("<Key>",self.keyBuffer)
+                self.textHotkey.bind("<Return>", self.keySave)
                 
             print(int(column[1:]))
         
@@ -183,7 +187,7 @@ class Initialize:
             
             
             
-        else: # Mayor a 3 segundos
+        else: # Mayor a 300ms
             # Se reinicia la cuenta y el diccionario
             self.n = 0
             self.hotkeybuffDict = {}
@@ -207,8 +211,10 @@ class Initialize:
         
         item = self.treeCreador.focus()
         self.treeCreador.item(item,value=self.strJoiner)
-        self.listBoton[item]["values"] = self.strJoiner
+        self.listBoton[item]["values"][0] = self.strJoiner
         self.hotkeybuffDict = {}
+        self.strJoiner = ""
+        print(self.hotkeybuffDict)
 
         e.widget.place_forget()
         self.ventana.focus() # Quitar focus del textEntry
@@ -218,12 +224,18 @@ class Initialize:
         item = self.treeCreador.focus()
         self.newWindow.geometry("500x100")
         self.newWindow.resizable(False,False) # Para hacerlo no resizable
-        self.newWindow.deiconify()
+        self.newWindow.deiconify() # Hacerlo aparecer
         self.newWindow.wm_protocol("WM_DELETE_WINDOW",lambda: self.newWindow.withdraw()) # Esto ocurre al tratar de salir de la ventana
+        
+        self.newWindow.bind("<Key>",self.keyBuffer)
+        self.newWindow.bind("<Return>",self.keySaveTL)
         print(item)
-        # self.newWindow.pack()
-        pass
     
+    def keySaveTL (self,e):
+        self.textTL.config(text=self.strJoiner)
+        
+        self.newWindow.withdraw()
+        pass
     
     def loadData(self):
         try:
