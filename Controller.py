@@ -11,7 +11,7 @@ import json
 import os
 
 # -----------CONSTANTES-----------
-HOTKEYPATH = "hotkeys.js"
+HOTKEYPATH = "hotkeys.json"
 PATH = os.path.join("data")
 PATHJS = os.path.join(PATH, HOTKEYPATH)
 
@@ -117,6 +117,7 @@ class Initialize:
                     self.listBoton[item]["text"] = text
                     e.widget.delete(0, "end")
                     e.widget.place_forget()
+                    self.treeCreador.focus_set()  # Hace focus en el tree
 
                 self.entryName.delete(0, "end")
                 item = self.treeCreador.focus()
@@ -212,7 +213,6 @@ class Initialize:
 
     # -----------SAVE THE KEY BUFFER IF ENTER IS PRESSED-----------
     def keySave(self, e):
-        print(self.strJoiner is "")
         item = self.treeCreador.focus()
         self.treeCreador.item(item, value=[self.strJoiner])
         self.listBoton[item]["values"][0] = self.strJoiner
@@ -233,9 +233,11 @@ class Initialize:
         )  # Esto ocurre al tratar de salir de la ventana
 
         try:
-            self.textTL.config(text=self.listBoton[item]["values"][1])
+            self.strJoiner = self.listBoton[item]["values"][1]
+            self.textTL.config(text=self.strJoiner)
         except IndexError:
-            pass  # No hará nada
+            self.strJoiner = ""
+            self.textTL.config(text=self.strJoiner)
 
         self.newWindow.bind("<Key>", self.keyBuffer)
         self.newWindow.bind("<Return>", self.keySaveTL)
@@ -243,11 +245,13 @@ class Initialize:
 
     def keySaveTL(self, e):
         item = self.treeCreador.focus()
+
         try:
             self.listBoton[item]["values"][1] = self.strJoiner
         except:
             self.listBoton[item]["values"].append(self.strJoiner)
 
+        print(self.strJoiner)
         self.newWindow.withdraw()
 
     def loadData(self):

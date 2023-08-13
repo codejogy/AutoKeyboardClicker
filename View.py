@@ -34,9 +34,9 @@ ventana.rowconfigure(1, weight=10)
 
 ventanaTopLevel = tkinter.Toplevel(ventana)
 ventanaTopLevel.title(NAMETITLETL)
-ventanaTopLevel.columnconfigure(0,weight=1)
-ventanaTopLevel.rowconfigure(0,weight=1)
-ventanaTopLevel.rowconfigure(1,weight=5)
+ventanaTopLevel.columnconfigure(0, weight=1)
+ventanaTopLevel.rowconfigure(0, weight=1)
+ventanaTopLevel.rowconfigure(1, weight=5)
 # Frames secundarios
 frame00 = tkinter.LabelFrame(ventana)
 frame01 = tkinter.LabelFrame(ventana)  # BOTONES Y TITULO
@@ -46,8 +46,10 @@ frame11 = tkinter.LabelFrame(ventana)  # ENTRE 10 y 12
 frame12 = tkinter.LabelFrame(ventana)  # CREADOS
 
 # Frames secundarios TopLevel
-frameTL00 = tkinter.Label(ventanaTopLevel) # Frame de arriba
-frameTL01 = tkinter.LabelFrame(ventanaTopLevel,) # Frame de abajo
+frameTL00 = tkinter.Label(ventanaTopLevel)  # Frame de arriba
+frameTL01 = tkinter.LabelFrame(
+    ventanaTopLevel,
+)  # Frame de abajo
 
 # FRAMES PARA LISTA EN USO Y CREADO
 frameLista = tkinter.LabelFrame(ventana, relief="groove")
@@ -59,7 +61,7 @@ frame12 = frameCreado  # DEFINIENDO QUE ES LO MISMO pero inutil
 labelName = tkinter.Label(frame01, text=NAMETITLE)
 labelUso = tkinter.Label(frameLista, text=USE)
 labelCreados = tkinter.Label(frameCreado, text=MADE)
-labelTopLevel = ttk.Label(frameTL00, text=LABELTL,justify="center")
+labelTopLevel = ttk.Label(frameTL00, text=LABELTL, justify="center")
 
 # BOTONES
 botonAgregar = tkinter.Button(frame01, text=ADD)
@@ -108,21 +110,36 @@ frameCreado.rowconfigure(1, weight=1)
 # ---------------GRIDS[VENTANATOPLEVEL]---------------
 
 #
-frameTL00.grid(row=0,column=0,sticky="")
-frameTL00.columnconfigure(0,weight=1)
-frameTL00.rowconfigure(0,weight=1)
-frameTL01.grid(row=1,column=0,sticky="NSEW")
-frameTL01.columnconfigure(0,weight=1)
-frameTL01.rowconfigure(0,weight=1)
+frameTL00.grid(row=0, column=0, sticky="")
+frameTL00.columnconfigure(0, weight=1)
+frameTL00.rowconfigure(0, weight=1)
+frameTL01.grid(row=1, column=0, sticky="NSEW")
+frameTL01.columnconfigure(0, weight=1)
+frameTL01.rowconfigure(0, weight=1)
 # ---------------GRIDS[FRAMES]---------------
 
 # LABELS FRAME01
-labelName.grid(row=0, column=0, )
+labelName.grid(
+    row=0,
+    column=0,
+)
 
 # BOTONES FRAME01
-botonAgregar.grid(row=1, column=0, pady=5, )
-botonLista.grid(row=2, column=0, pady=5, )
-botonEliminar.grid(row=3, column=0, pady=5, )
+botonAgregar.grid(
+    row=1,
+    column=0,
+    pady=5,
+)
+botonLista.grid(
+    row=2,
+    column=0,
+    pady=5,
+)
+botonEliminar.grid(
+    row=3,
+    column=0,
+    pady=5,
+)
 
 # LABELS IN FRAMES
 
@@ -141,10 +158,10 @@ treeviewCreador.grid(row=1, column=0, sticky="NSEW")
 
 # ---------------GRIDS[VENTANATOPLEVEL]---------------
 
-labelTopLevel.grid(row=0,column=0,sticky="NSEW")
-textTL.grid(row=0,column=0,sticky="NSEW")
+labelTopLevel.grid(row=0, column=0, sticky="NSEW")
+textTL.grid(row=0, column=0, sticky="")
 
-#---------------TREEVIEW CONFIG [FRAMES]---------------
+# ---------------TREEVIEW CONFIG [FRAMES]---------------
 # Titulos
 treeviewLista.heading("#0", text=HEADINGNAMES[0])
 treeviewLista.heading(0, text=HEADINGNAMES[1])
@@ -152,8 +169,8 @@ treeviewCreador.heading("#0", text=HEADINGNAMES[0])
 treeviewCreador.heading(0, text=HEADINGNAMES[1])
 
 # ---------------GRIDS[TOPLEVEL]---------------
-ventanaTopLevel.minsize(200,100)
-ventanaTopLevel.withdraw() # Hace que no aparezca directamente, sino hasta que iconify sea declarado
+ventanaTopLevel.minsize(200, 100)
+ventanaTopLevel.withdraw()  # Hace que no aparezca directamente, sino hasta que iconify sea declarado
 
 # Boton ADD para insertar un item en treeview
 
@@ -177,8 +194,6 @@ ventanaTopLevel.withdraw() # Hace que no aparezca directamente, sino hasta que i
 # treeviewCreador.insert("","end",text="button",tags=("ttk","simple"))
 # treeviewCreador.tag_configure("ttk",foreground="yellow")
 # treeviewCreador.tag_configure("simple",background="green")
-
-
 
 
 # def agregarObjeto():
